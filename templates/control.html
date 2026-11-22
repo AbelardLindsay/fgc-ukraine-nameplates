@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoreboard Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="{{ static_url('control.css') }}">
+</head>
+<body>
+
+  <!-- ── Login Screen ─────────────────────────── -->
+  <div id="login-screen" class="auth-screen">
+    <div class="auth-card">
+      <img src="{{ static_url('img/fgc-ukraine-logo.png') }}" alt="FGC Ukraine" class="app-logo" draggable="false">
+      <h1>Scoreboard Control</h1>
+      <p>Enter admin password to continue</p>
+      <form id="login-form">
+        <div class="text-field">
+          <input type="password" id="password-input" placeholder=" " autocomplete="current-password">
+          <label for="password-input">Password</label>
+        </div>
+        <div class="error-msg" id="login-error"></div>
+        <button type="submit" class="btn btn-filled btn-full" id="login-btn">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Control Panel ────────────────────────── -->
+  <div id="control-panel" class="hidden">
+    <header class="top-app-bar">
+      <img src="{{ static_url('img/fgc-ukraine-logo.png') }}" alt="FGC Ukraine" class="app-logo" draggable="false">
+      <span class="top-app-bar-title">Scoreboard Control</span>
+      <div class="top-app-bar-actions">
+        <a href="/appearance" class="btn btn-tonal"><span class="material-symbols-outlined">palette</span> Appearance</a>
+        <a href="/" target="_blank" class="btn btn-outlined"><span class="material-symbols-outlined">open_in_new</span> Open Scoreboard</a>
+        <button class="icon-btn" id="change-password-btn" title="Change password"><span class="material-symbols-outlined">key</span></button>
+        <button class="icon-btn" id="logout-btn" title="Logout"><span class="material-symbols-outlined">logout</span></button>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- ── Top Row: Event + Match Setup ────────── -->
+      <section class="top-section">
+
+        <div class="card">
+          <h2 class="card-title"><span class="material-symbols-outlined">event</span> Event</h2>
+          <div class="text-field">
+            <input type="text" id="event-name-input" placeholder=" " maxlength="64" list="events-datalist">
+            <label for="event-name-input">Event Name</label>
+          </div>
+          <button class="btn btn-filled btn-full" id="event-btn">Set Event Name</button>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title"><span class="material-symbols-outlined">sports_esports</span> Match Setup</h2>
+          <div class="bulk-row">
+            <div class="text-field">
+              <input type="text" id="bulk-p1-input" placeholder=" " maxlength="32" list="players-datalist">
+              <label for="bulk-p1-input">Player 1</label>
+            </div>
+            <div class="text-field">
+              <select id="bulk-round-select">
+                {% for r in rounds %}
+                <option value="{{ r }}">{{ r }}</option>
+                {% endfor %}
+              </select>
+              <label for="bulk-round-select">Round</label>
+            </div>
+            <div class="text-field">
+              <input type="text" id="bulk-p2-input" placeholder=" " maxlength="32" list="players-datalist">
+              <label for="bulk-p2-input">Player 2</label>
+            </div>
+            <button class="btn btn-accent" id="save-match-btn"><span class="material-symbols-outlined">save</span> Save Match</button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── Score Controls ───────────────────────── -->
+      <section class="control-grid">
+
+      <div class="card">
+        <h2 class="card-title"><span class="dot p1"></span>Player 1</h2>
+
+        <div class="input-row">
+          <div class="text-field">
+            <input type="text" id="p1-name-input" placeholder=" " maxlength="32" list="players-datalist">
+            <label for="p1-name-input">Nickname</label>
+          </div>
+          <button class="btn btn-tonal" id="p1-name-btn">Set</button>
+        </div>
+
+        <div class="section-label">Score</div>
+        <div class="score-control">
+          <button class="score-btn minus" id="p1-minus"><span class="material-symbols-outlined">remove</span></button>
+          <span class="score-display" id="p1-score-display">0</span>
+          <button class="score-btn plus" id="p1-plus"><span class="material-symbols-outlined">add</span></button>
+        </div>
+
+        <button class="btn btn-danger btn-full" id="p1-reset"><span class="material-symbols-outlined">restart_alt</span> Reset Score</button>
+      </div>
+
+        <div class="card match-card">
+          <h2 class="card-title"><span class="material-symbols-outlined">emoji_events</span> Match Info</h2>
+          <div class="text-field">
+            <select id="round-select">
+              {% for r in rounds %}
+              <option value="{{ r }}">{{ r }}</option>
+              {% endfor %}
+            </select>
+            <label for="round-select">Round</label>
+          </div>
+          <button class="btn btn-filled btn-full" id="round-btn">Set Round</button>
+
+          <div class="divider"></div>
+
+          <div class="action-row">
+            <button class="btn btn-tonal btn-full" id="swap-btn"><span class="material-symbols-outlined">swap_horiz</span> Swap Players</button>
+            <button class="btn btn-danger btn-full" id="reset-all-btn"><span class="material-symbols-outlined">restart_alt</span> Reset All Scores</button>
+          </div>
+        </div>
+
+      <div class="card">
+        <h2 class="card-title"><span class="dot p2"></span>Player 2</h2>
+
+        <div class="input-row">
+          <div class="text-field">
+            <input type="text" id="p2-name-input" placeholder=" " maxlength="32" list="players-datalist">
+            <label for="p2-name-input">Nickname</label>
+          </div>
+          <button class="btn btn-tonal" id="p2-name-btn">Set</button>
+        </div>
+
+        <div class="section-label">Score</div>
+        <div class="score-control">
+          <button class="score-btn minus" id="p2-minus"><span class="material-symbols-outlined">remove</span></button>
+          <span class="score-display" id="p2-score-display">0</span>
+          <button class="score-btn plus" id="p2-plus"><span class="material-symbols-outlined">add</span></button>
+        </div>
+
+        <button class="btn btn-danger btn-full" id="p2-reset"><span class="material-symbols-outlined">restart_alt</span> Reset Score</button>
+      </div>
+
+      </section>
+
+    </main>
+
+    <div class="snackbar" id="status-bar" role="status"></div>
+
+    <dialog id="password-dialog" class="md-dialog">
+      <h2>Change Password</h2>
+      <form id="password-form">
+        <div class="text-field">
+          <input type="password" id="current-password-input" placeholder=" " autocomplete="current-password" required>
+          <label for="current-password-input">Current Password</label>
+        </div>
+        <div class="text-field">
+          <input type="password" id="new-password-input" placeholder=" " autocomplete="new-password" minlength="8" required>
+          <label for="new-password-input">New Password</label>
+        </div>
+        <div class="text-field">
+          <input type="password" id="confirm-password-input" placeholder=" " autocomplete="new-password" required>
+          <label for="confirm-password-input">Confirm New Password</label>
+        </div>
+        <div class="error-msg" id="password-error"></div>
+        <div class="dialog-actions">
+          <button type="button" class="btn btn-text" id="password-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-filled">Change</button>
+        </div>
+      </form>
+    </dialog>
+  </div>
+
+  <datalist id="players-datalist"></datalist>
+  <datalist id="events-datalist"></datalist>
+
+  <script>
+    window.ROUNDS = {{ rounds | tojson }};
+  </script>
+  <script src="{{ static_url('control.js') }}"></script>
+</body>
+</html>

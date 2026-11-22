@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.db
+.env
+.venv/
+/fonts/
+
+# Local deployment files (not part of the project)
+/Caddyfile
+/docker-compose.yml
+
+# MemPalace
+/mempalace.yaml
+/entities.json

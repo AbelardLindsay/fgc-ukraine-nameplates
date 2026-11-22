@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FGC Ukraine Scoreboard</title>
+  <link rel="stylesheet" href="{{ static_url('scoreboard.css') }}">
+  <style id="font-face"></style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <!-- P1: isosceles trapeze (both sides cut), blue -->
+    <div class="p1-panel">
+      <span class="player-name" id="p1-name">{{ state.player1_name }}</span>
+      <span class="score" id="p1-score">{{ state.player1_score }}</span>
+    </div>
+
+    <!-- Round: reversed trapeze (wider at bottom), overlaps player panels by 26px each side -->
+    <div class="round-panel">
+      <span class="round" id="round-text">{{ state.round }}</span>
+    </div>
+
+    <!-- P2: isosceles trapeze (both sides cut), yellow -->
+    <div class="p2-panel">
+      <span class="score" id="p2-score">{{ state.player2_score }}</span>
+      <span class="player-name" id="p2-name">{{ state.player2_name }}</span>
+    </div>
+  </div>
+
+  <!-- Bottom: centered, auto-width, scales with event name -->
+  <div class="bottom-bar">
+    <span class="event-name" id="event-name">{{ state.event_name }}</span>
+  </div>
+
+  <script id="initial-state" type="application/json">{{ state | tojson }}</script>
+  <script src="{{ static_url('scoreboard.js') }}"></script>
+</body>
+</html>

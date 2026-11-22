@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoreboard Setup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="{{ static_url('control.css') }}">
+</head>
+<body>
+
+  <div class="auth-screen">
+    <div class="auth-card">
+      <img src="{{ static_url('img/fgc-ukraine-logo.png') }}" alt="FGC Ukraine" class="app-logo" draggable="false">
+      <h1>Set Admin Password</h1>
+      <p>Choose the password for the scoreboard control panel. Minimum 8 characters.</p>
+      <form id="setup-form">
+        <div class="text-field">
+          <input type="password" id="setup-password-input" placeholder=" " autocomplete="new-password" required>
+          <label for="setup-password-input">Password</label>
+        </div>
+        <div class="text-field">
+          <input type="password" id="setup-confirm-input" placeholder=" " autocomplete="new-password" required>
+          <label for="setup-confirm-input">Confirm Password</label>
+        </div>
+        <div class="error-msg" id="setup-error"></div>
+        <button type="submit" class="btn btn-filled btn-full">Create Password</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="{{ static_url('setup.js') }}"></script>
+</body>
+</html>

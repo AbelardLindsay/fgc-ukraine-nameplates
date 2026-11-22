@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scoreboard Appearance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="{{ static_url('control.css') }}">
+</head>
+<body>
+
+  <header class="top-app-bar">
+    <a href="/control" class="icon-btn" title="Back to control"><span class="material-symbols-outlined">arrow_back</span></a>
+    <img src="{{ static_url('img/fgc-ukraine-logo.png') }}" alt="FGC Ukraine" class="app-logo" draggable="false">
+    <span class="top-app-bar-title">Appearance</span>
+    <div class="top-app-bar-actions">
+      <a href="/" target="_blank" class="btn btn-outlined"><span class="material-symbols-outlined">open_in_new</span> Open Scoreboard</a>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="appearance-grid">
+
+      <div class="card">
+        <h2 class="card-title"><span class="material-symbols-outlined">font_download</span> Font</h2>
+        <div class="text-field">
+          <select id="font-select"></select>
+          <label for="font-select">Overlay Font</label>
+        </div>
+        <div class="section-label">Upload Font</div>
+        <div class="file-field">
+          <input type="file" id="font-file" accept=".ttf,.otf,.woff,.woff2">
+          <button class="btn btn-tonal" id="font-upload-btn"><span class="material-symbols-outlined">upload</span> Upload</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title"><span class="material-symbols-outlined">palette</span> Colors</h2>
+        <div class="color-grid">
+          <label class="color-field"><input type="color" id="p1_color_start"><span>Player 1 Start</span></label>
+          <label class="color-field"><input type="color" id="p1_color_end"><span>Player 1 End</span></label>
+          <label class="color-field"><input type="color" id="p2_color_start"><span>Player 2 Start</span></label>
+          <label class="color-field"><input type="color" id="p2_color_end"><span>Player 2 End</span></label>
+          <label class="color-field"><input type="color" id="round_bg_color"><span>Round Background</span></label>
+          <label class="color-field"><input type="color" id="round_text_color"><span>Round Text</span></label>
+          <label class="color-field"><input type="color" id="player_text_color"><span>Name / Score Text</span></label>
+          <label class="color-field"><input type="color" id="event_text_color"><span>Event Text</span></label>
+        </div>
+      </div>
+
+      <div class="card card-wide">
+        <h2 class="card-title"><span class="material-symbols-outlined">format_size</span> Text Size</h2>
+        <div class="size-grid">
+          {% for key, label in [('name_size', 'Player Name'), ('score_size', 'Score'), ('round_size', 'Round'), ('event_size', 'Event Name')] %}
+          <label class="size-field">
+            <span class="size-label">{{ label }} <output id="{{ key }}_out"></output></span>
+            <input type="range" id="{{ key }}" min="{{ font_sizes[key][1] }}" max="{{ font_sizes[key][2] }}" step="1">
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+
+    </section>
+
+    <div class="page-actions">
+      <button class="btn btn-accent" id="save-appearance-btn"><span class="material-symbols-outlined">save</span> Save Appearance</button>
+      <button class="btn btn-danger" id="reset-appearance-btn"><span class="material-symbols-outlined">restart_alt</span> Reset to Defaults</button>
+    </div>
+
+  </main>
+
+  <div class="snackbar" id="status-bar" role="status"></div>
+
+  <script>
+    window.DEFAULT_THEME = {{ default_theme | tojson }};
+    window.FONT_SIZES = {{ font_sizes | tojson }};
+  </script>
+  <script src="{{ static_url('appearance.js') }}"></script>
+</body>
+</html>

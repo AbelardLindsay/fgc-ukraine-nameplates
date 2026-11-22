@@ -1,0 +1,242 @@
+:root {
+  --font: 'Scoreboard Font', 'Rajdhani', sans-serif;
+  --p1-color-start: #0059b7; --p1-color-end: #007dc0;
+  --p2-color-start: #fca600; --p2-color-end: #ffc435;
+  --round-bg: #f0f0f0; --round-text: #0f0f0f;
+  --player-text: #f0f0f0; --event-text: #f0f0f0;
+  --cut: 53px;   /* player panel trapeze cut (= panel height, 45°) */
+  --rcut: 26px;  /* round panel cut (= round panel height, 45°) */
+  --name-size: 22px; --score-size: 30px; --round-size: 12px; --event-size: 18px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: transparent;
+  overflow: hidden;
+  font-family: var(--font);
+}
+
+/* ═══════════════════════════════════════════
+   TOP BAR
+   Flex row. Round panel overlaps each player
+   panel by --rcut (26px) via negative margins,
+   placing clip edges on the exact same line.
+═══════════════════════════════════════════ */
+
+.top-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+/* ─── PLAYER PANELS ────────────────────────
+   Isosceles trapeze: wider at top, both sides
+   cut 53px at 45°. Same clip for P1 and P2
+   since the shape is symmetric.
+─────────────────────────────────────────── */
+
+.p1-panel,
+.p2-panel {
+  flex: 1;
+  max-width: 515px;
+  height: var(--cut);
+  display: flex;
+  align-items: center;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    calc(100% - var(--cut)) var(--cut),
+    var(--cut) var(--cut)
+  );
+  pointer-events: auto;
+}
+
+/* P1: name fills center, score pinned to inner (right) edge.
+   Padding: 58px outer (≥ 53px clip at bottom) + 56px inner. */
+.p1-panel {
+  background: linear-gradient(90deg, var(--p1-color-start), var(--p1-color-end));
+  padding: 0 56px 0 58px;
+  animation: slide-from-top .65s cubic-bezier(.16,1,.3,1) 1s both;
+}
+
+/* P2: score pinned to inner (left) edge, name fills center.
+   Overlap round panel by --rcut so edges share same diagonal. */
+.p2-panel {
+  background: linear-gradient(90deg, var(--p2-color-start), var(--p2-color-end));
+  padding: 0 58px 0 56px;
+  margin-left: calc(-1 * var(--rcut));
+  animation: slide-from-top .65s cubic-bezier(.16,1,.3,1) 1s both;
+}
+
+.player-name {
+  flex: 1;
+  text-align: center;
+  font-size: var(--name-size);
+  color: var(--player-text);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+/* Score: fixed width so digit count changes never shift the nickname */
+.score {
+  font-size: var(--score-size);
+  font-weight: bold;
+  color: var(--player-text);
+  width: 1.6em;  /* 48px at the default size; scales with --score-size */
+  text-align: center;
+  flex-shrink: 0;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* ─── ROUND PANEL ──────────────────────────
+   Reversed trapeze: narrower at top, wider at
+   bottom. Both edges cut --rcut (26px) at 45°.
+
+   margin-left: -26px → the round panel's left
+   clip edge sits on exactly the same diagonal
+   line as P1's right clip edge.
+   P2 uses the same -26px overlap.
+─────────────────────────────────────────── */
+
+.round-panel {
+  flex-shrink: 0;
+  width: 457px;
+  height: var(--rcut);
+  background: var(--round-bg);
+  clip-path: polygon(
+    var(--rcut) 0,
+    calc(100% - var(--rcut)) 0,
+    100% var(--rcut),
+    0 var(--rcut)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Overlap P1 by --rcut so edges are colinear */
+  margin-left: calc(-1 * var(--rcut));
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+  animation: slide-from-top .65s cubic-bezier(.16,1,.3,1) 1s both;
+}
+
+.round {
+  font-size: var(--round-size);
+  color: var(--round-text);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* ═══════════════════════════════════════════
+   BOTTOM BAR
+   Reverse trapeze (wider at bottom), centered,
+   auto-width — scales with event name text.
+═══════════════════════════════════════════ */
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 53px;
+  background: linear-gradient(90deg,
+    var(--p1-color-start)  0%,
+    var(--p1-color-end)    16.67%,
+    var(--p2-color-start)  33.33%,
+    var(--p2-color-end)    50%,
+    var(--p1-color-start)  66.67%,
+    var(--p1-color-end)    83.33%,
+    var(--p2-color-start)  100%
+  );
+  background-size: 300% 100%;
+  /* Reverse trapeze: cut top corners at 45°.
+     Padding ensures text clears the 53px cuts. */
+  clip-path: polygon(
+    var(--cut) 0,
+    calc(100% - var(--cut)) 0,
+    100% var(--cut),
+    0 var(--cut)
+  );
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 53px clip + 20px comfortable padding on each side */
+  padding: 0 73px;
+  white-space: nowrap;
+  pointer-events: auto;
+  animation:
+    slide-up .65s cubic-bezier(.16,1,.3,1) 1s backwards,
+    gradient-cycle 4s linear 1.65s infinite;
+}
+
+.event-name {
+  font-size: var(--event-size);
+  color: var(--event-text);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  display: inline-block;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE LOAD ANIMATIONS
+═══════════════════════════════════════════ */
+
+@keyframes slide-from-top {
+  from { transform: translateY(-150%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes slide-up {
+  from { transform: translateX(-50%) translateY(150%); }
+  to   { transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes gradient-cycle {
+  0%   { background-position: 0%   center; }
+  100% { background-position: 100% center; }
+}
+
+/* ═══════════════════════════════════════════
+   RUNTIME ANIMATIONS
+═══════════════════════════════════════════ */
+
+@keyframes flip-out {
+  from { transform: perspective(400px) rotateX(0);     opacity: 1; }
+  to   { transform: perspective(400px) rotateX(90deg); opacity: 0; }
+}
+@keyframes flip-in {
+  from { transform: perspective(400px) rotateX(-90deg); opacity: 0; }
+  to   { transform: perspective(400px) rotateX(0);      opacity: 1; }
+}
+.flip-out { animation: flip-out .18s ease-in  forwards; }
+.flip-in  { animation: flip-in  .22s ease-out forwards; }
+
+@keyframes text-out {
+  from { transform: translateY(0);     opacity: 1; }
+  to   { transform: translateY(-10px); opacity: 0; }
+}
+@keyframes text-in {
+  from { transform: translateY(10px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.text-out { animation: text-out .2s ease-in  forwards; }
+.text-in  { animation: text-in  .25s ease-out forwards; }
+
+@keyframes round-pulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.15); color: var(--p1-color-start); }
+  100% { transform: scale(1); }
+}
+.round.round-pulse { animation: round-pulse .5s cubic-bezier(.34,1.56,.64,1) forwards; }
