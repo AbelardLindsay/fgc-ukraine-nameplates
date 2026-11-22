@@ -22,6 +22,14 @@ Real-time fighting game scoreboard overlay for OBS, built with FastAPI and WebSo
 
 By default this creates a `.venv`, installs the dependencies and sets the admin password; then start the server with `.venv/bin/python run.py`. With `./setup.sh --docker` (or by choosing Docker when asked) it builds the image, sets the password and runs the app in a container instead. Either way it can also, if you ask, add your domain to an installed Caddy for automatic HTTPS (see the optional HTTPS section below). The manual steps are below.
 
+On Windows (PowerShell):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```
+
+This does the same as `setup.sh` (a `.venv` by default; `-Docker`, or choosing Docker when asked, uses Docker Desktop instead) but without the Caddy/HTTPS step. Start the server with `.venv\Scripts\python.exe run.py`. `-ExecutionPolicy Bypass` is needed because Windows' default policy blocks unsigned local scripts.
+
 ---
 
 ## Prerequisites
